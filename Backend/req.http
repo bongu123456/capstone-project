@@ -1,0 +1,149 @@
+###User register
+POST http://localhost:4000/user-api/users
+Content-Type: application/json
+
+{
+"firstName":"test",
+"lastName":"reddy",
+"email":"test@gamil.com",
+"password":"test@2005",
+"profileImageUrl":"http://examples.com/avatars/user.png"
+}
+
+###User login
+POST http://localhost:4000/common-api/login
+Content-Type: application/json
+
+{
+    "email":"mshashankreddy20@gmail.com",
+    "password":"shashank@2005"
+}
+
+
+
+###Get the article by userID
+GET http://localhost:4000/user-api/articles
+
+
+
+###user comments
+POST http://localhost:4000/user-api/articles/comment
+Content-Type: application/json
+
+{
+  "user": "698ac625b70abefd01ef3f",
+  "articleId": "698a9506d70ad49705aa4e33",
+  "comment": "Excellent"
+}
+
+
+###logout
+GET http://localhost:4000/common-api/logout
+
+
+
+
+
+
+
+
+
+
+
+###Author register
+POST http://localhost:4000/author-api/users
+Content-Type: application/json
+
+{
+"firstName":"Bunny",
+"lastName":"reddy",
+"email":"bunny@gmail.com",
+"password":"bunny@123",
+"profileImageUrl":""
+}
+
+###Author login
+POST http://localhost:4000/common-api/login
+Content-Type: application/json
+
+{
+    "email":"bunny@gmail.com",
+    "password":"bunny@123"
+}
+
+
+###Create the article
+POST http://localhost:4000/author-api/articles
+Content-Type: application/json
+
+{
+    "author":"69c3ab52e97af94f6b275cd9",
+    "title":"Java: The Pillars of Modern Software Development",
+    "category":"Programming",
+    "content":"Java is a high-level, object-oriented programming language designed by Sun Microsystems in 1995. Renowned for its Write Once, Run Anywhere (WORA) philosophy, Java allows developers to create code that runs on any platform with a Java Virtual Machine (JVM). This portability makes it ideal for building everything from mobile apps and Android development to robust enterprise applications and Big Data tools."
+}
+
+
+
+###Get the article
+GET http://localhost:4000/author-api/articles/69ae8a4dccdc6f8446b05c4e
+
+
+###Update article(Author)
+PUT http://localhost:4000/author-api/articles
+Content-Type: application/json
+
+{
+    "author":"69896b773e033997d45b2d58",
+    "articleId":"698977106e2109eefc2a2999",
+    "title":"test3 article",
+    "category":"java programming",
+    "content":"This is the article from test3 article"
+}
+
+
+###Delete article(Author)
+PATCH http://localhost:4000/author-api/articles/69aee2c5fb7f33c7d3ed9de9/status
+Content-Type: application/json
+Cookie: token=YOUR_JWT_TOKEN
+
+{
+  "isArticleActive": false
+}
+
+
+
+
+
+ 
+###Get the article 
+GET http://localhost:4000/admin-api/articles
+
+
+###block the user
+put http://localhost:4000/admin-api/block-user
+Content-Type: application/json
+
+{
+    "userId":"6989669c84f9a09ce3566085"
+}
+
+
+###unblock the user
+put http://localhost:4000/admin-api/block-user
+Content-Type: application/json
+
+{
+    "userId":"698ac625b70abefd01ef3f91"
+}
+
+
+###change password
+PUT http://localhost:4000/common-api/change-password
+Content-Type: application/json
+
+{
+    "email":"rama@gamil.com",
+    "currentPassword":"rama@20050",
+    "newPassword":"ramu@5000"
+}
