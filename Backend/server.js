@@ -13,7 +13,13 @@ config()
 
 const app = exp()
 //use cors middleware
-app.use(cors({origin: ['http://localhost:5173'],credentials:true}))
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://blogapp1-sigma.vercel.app"
+  ],
+  credentials: true
+}));
 // body parser
 app.use(exp.json())
 app.use(cookieParser())
@@ -80,7 +86,7 @@ app.use((err, req, res, next) => {
       error: `${field} "${value}" already exists`,
     });
   }
-  // ✅ HANDLE CUSTOM ERRORS
+  // 
   if (err.status) {
     return res.status(err.status).json({
       message: "error occurred",
