@@ -80,6 +80,108 @@ Protected routes exclusively for authors (`AUTHOR` role).
 
 ---
 
+## 🗄️ Database Schemas & Data Models
+
+Mongoose enforces strict schema definitions, options, and validations on top of MongoDB collections. The primary schemas are defined as follows:
+
+### 1. User Schema (`UserModel.js`)
+Defined in [UserModel.js](file:///c:/Users/Renu%20sri/Downloads/BLOG-APP/BLOG-APP/Backend/models/UserModel.js) to manage authentication, role-based controls, and profile metadata.
+
+```javascript
+const UserSchema = new Schema({
+  firstName: {
+    type: String,
+    required: [true, "First name is required"],
+  },
+  lastName: {
+    type: String,
+  },
+  email: {
+    type: String,
+    required: [true, "Email is required"],
+    unique: [true, "Email already existed"],
+  },
+  password: {
+    type: String,
+    required: [true, "Password is required"],
+  },
+  profileImageUrl: {
+    type: String,
+  },
+  role: {
+    type: String,
+    enum: ["AUTHOR", "USER", "ADMIN"],
+    required: [true, "{VALUE} is an invalid role"],
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
+}, {
+  timestamps: true,   // Automatically handles createdAt and updatedAt
+  strict: "throw",    // Throws a validation error if raw/unmapped fields are saved
+  versionKey: false   // Removes Mongoose's internal "__v" property from records
+});
+```
+
+---
+
+### 2. Article Schema (`ArticleModel.js`)
+Defined in [ArticleModel.js](file:///c:/Users/Renu%20sri/Downloads/BLOG-APP/BLOG-APP/Backend/models/ArticleModel.js) to manage article details, soft-delete statuses, and relational comment arrays.
+
+```javascript
+const articleSchema = new Schema({
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',                  // Reference key linking to the User model
+    required: [true, "Author Id required"]
+  },
+  title: {
+    type: String,
+    required: [true, "Title is required"]
+  },
+  category: {
+    type: String,
+    required: [true, "Category is required"]
+  },
+  content: {
+    type: String,
+    required: [true, "Content is required"]
+  },
+  comments: [userCommentSchema], // Nested array of comment subdocuments
+  isArticleActive: {
+    type: Boolean,
+    default: true                  // Enables soft-deletion and content toggle
+  },
+}, {
+  timestamps: true,
+  strict: "throw",
+  versionKey: false
+});
+```
+
+---
+
+### 3. Nested Comment Schema (`ArticleModel.js`)
+Subdocument structure embedded within each Article record to track comments.
+
+```javascript
+const userCommentSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'                   // Reference key linking back to the commenter
+  },
+  comment: {
+    type: String,
+    required: true
+  }
+}, {
+  timestamps: true               // Tracks exactly when comments are posted/edited
+});
+```
+
+---
+
 ## 🔒 Custom Middlewares
 
 ### 1. Multi-Role Token Verification (`verifyToken.js`)
