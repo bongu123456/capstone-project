@@ -1,112 +1,138 @@
-# Blog App
+# 📝 BlogApp — Full-Stack MERN Capstone Project
 
-A full-stack Blog Application built with the MERN stack (MongoDB, Express.js, React, Node.js). This project allows users to read articles, and authors to create, manage, and publish their articles.
-
-## Tech Stack & Packages
-
-### Frontend (React + Vite)
-- **Framework**: React 19 (via Vite)
-- **Routing**: `react-router` & `react-router-dom`
-- **State Management**: `zustand`
-- **HTTP Client**: `axios`
-- **Styling**: `tailwindcss` & `@tailwindcss/vite`
-- **Forms**: `react-hook-form`
-- **Notifications**: `react-hot-toast`
-
-### Backend (Node.js + Express)
-- **Framework**: `express`
-- **Database**: `mongoose` (MongoDB ORM)
-- **Authentication**: `jsonwebtoken` (JWT), `bcryptjs` (Password Hashing), `cookie-parser`
-- **Security**: `cors`
-- **Environment Management**: `dotenv`
-- **File Uploads**: `multer`, `cloudinary`
+BlogApp is a premium, secure, and modern full-stack blogging application built using the MERN stack (MongoDB, Express, React, Node.js). Engineered with a robust role-based access control system (supporting **Users**, **Authors**, and **Admins**), it provides a complete publishing workflow, smooth media uploads, and a distraction-free Apple-inspired reading interface.
 
 ---
 
-## Database Schemas
+## 🌟 Key Features
 
-### User Schema (`UserModel.js`)
-Stores user, author, and admin information.
-- `firstName` (String, required)
-- `lastName` (String)
-- `email` (String, required, unique)
-- `password` (String, required)
-- `profileImageUrl` (String)
-- `role` (String, enum: `["AUTHOR", "USER", "ADMIN"]`, required)
-- `isActive` (Boolean, default: `true`)
-- *Timestamps enabled (createdAt, updatedAt)*
-
-### Article Schema (`ArticleModel.js`)
-Stores articles written by authors and comments by users.
-- `author` (ObjectId referencing `user`, required)
-- `title` (String, required)
-- `category` (String, required)
-- `content` (String, required)
-- `comments` (Array of Comment Schema objects):
-  - `user` (ObjectId referencing `user`)
-  - `comment` (String, required)
-  - *Timestamps enabled*
-- `isArticleActive` (Boolean, default: `true`)
-- *Timestamps enabled (createdAt, updatedAt)*
+*   **Security First:** Secure authentication powered by JWT tokens stored in secure, client-hidden `HttpOnly` cookies.
+*   **Role-Based Access Control (RBAC):**
+    *   **USER:** Read articles, view author profiles, and post comments on active articles.
+    *   **AUTHOR:** Create, edit, soft-delete/restore, and manage their own articles.
+    *   **ADMIN:** Manage user roles, system states, and moderate content.
+*   **Smooth Media Integration:** Profile image upload stream powered by **Multer** and **Cloudinary** (direct memory buffer upload pipeline).
+*   **Aesthetic & Modern UI:** Designed with an **Apple Light-style Design System**—focused on clean typography, precise spacing, and rich micro-interactions.
+*   **Console-Clean UX:** Graceful page refresh session verification (`check-auth`) that avoids common red browser console errors.
+*   **Comprehensive Error Handling:** User-friendly Mongoose validation mapping and automatic Cloudinary asset rollback on registration failure.
 
 ---
 
-## Cloning the Repository
+## 💻 Tech Stack
 
-To get the project on your local machine, run:
+| Layer | Technology | Primary Purpose |
+| :--- | :--- | :--- |
+| **Frontend** | React 19 (Vite) | Fast, responsive UI with HMR |
+| **Styling** | Vanilla CSS + Tailwind | Apple Light design system & tokens |
+| **State** | Zustand | Light, highly efficient central state store |
+| **Routing** | React Router v7 | Declarative routing & dynamic view layout |
+| **Backend** | Express 5 | Modular and scalable HTTP API |
+| **Database** | MongoDB & Mongoose | Document database with schema validations |
+| **Media** | Cloudinary & Multer | Image storage & multi-part file parsing |
+| **Auth** | JSON Web Tokens & BcryptJS | Secure session cookies & hash encryption |
 
+---
+
+## 📂 Project Structure
+
+```text
+BLOG-APP/
+├── Backend/                     # Node.js + Express Server API
+│   ├── APIs/                    # Router controllers (User, Author, Admin, Common)
+│   ├── config/                  # Cloudinary and Multer configurations
+│   ├── middlewares/             # JWT token verification & error middleware
+│   ├── models/                  # Mongoose DB Schemas (User, Article)
+│   ├── services/                # Business logic (Registration, Authentication)
+│   ├── .env                     # Server environment variables
+│   ├── server.js                # Server entry point
+│   └── package.json
+│
+├── Frontend/                    # React Client Application
+│   ├── public/                  # Static assets
+│   ├── src/                     # Source directory
+│   │   ├── components/          # Profile dashboards, Forms, Headers, footers
+│   │   ├── store/               # Central state store (Zustand authStore)
+│   │   ├── styles/              # Design tokens and styles (common.js)
+│   │   └── App.jsx              # Main App wrapper & router configuration
+│   ├── vite.config.js           # Vite server settings
+│   └── package.json
+│
+└── README.md                    # Main Project Documentation (This File)
+```
+
+---
+
+## ⚙️ Local Development Setup
+
+To run this project locally, follow these steps:
+
+### 1. Prerequisite & Clones
 ```bash
 git clone <your-repository-url>
 cd BLOG-APP
 ```
 
+### 2. Backend Setup
+1. Navigate to the `Backend` directory:
+   ```bash
+   cd Backend
+   ```
+2. Install dependecies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the `Backend` root:
+   ```env
+   PORT=4000
+   DB_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/blogg-app
+   JWT_SECRET=your_jwt_signature_secret
+   CLOUD_NAME=your_cloudinary_cloud_name
+   API_KEY=your_cloudinary_api_key
+   API_SECRET=your_cloudinary_api_secret
+   ```
+4. Start the backend:
+   ```bash
+   node server.js
+   ```
+
+### 3. Frontend Setup
+1. Open a new terminal and navigate to the `Frontend` directory:
+   ```bash
+   cd Frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
 ---
 
-## Installation & Running the App
+## 🛡️ Security & Authentication Flow
 
-### 1. Backend Setup
-Navigate to the backend directory and install dependencies:
-```bash
-cd backend
-npm install
+```mermaid
+sequenceDiagram
+    participant Browser as React Client
+    participant Server as Express Server
+    participant DB as MongoDB Atlas
+
+    Browser->>Server: POST /common-api/login (credentials)
+    Server->>DB: Query User by Email
+    DB-->>Server: User record & Hashed Password
+    Server->>Server: Compare Passwords & Sign JWT
+    Server-->>Browser: Set-Cookie: token (HttpOnly, Secure) + 200 OK
+    Note over Browser,Server: User is now securely authenticated
 ```
 
-**Environment Variables**
-Create a `.env` file inside the `backend` directory with the following keys:
-```env
-DB_URL=your_mongodb_connection_string
-PORT=4000
-JWT_SECRET=your_jwt_secret
-CLOUD_NAME=your_cloudinary_name
-API_KEY=your_cloudinary_api_key
-API_SECRET=your_cloudinary_api_secret
-```
+1. **HttpOnly Cookies:** The session JWT is stored in an `HttpOnly` cookie. This makes it completely inaccessible to client-side scripts, protecting it from Cross-Site Scripting (XSS) attacks.
+2. **Graceful checkAuth:** The `/common-api/check-auth` endpoint performs dynamic verification. Instead of returning raw `401` errors that pollute the developer console, it responds with a clean `200 OK` status and a boolean `isAuthenticated: false` flag if no session cookie exists.
 
-**Start the Backend Server**
-```bash
-# Standard start
-node server.js
+---
 
-# For auto-reloading during development
-npx nodemon server.js
-```
-The backend will run on `http://localhost:4000`.
+## 👥 Contributors & License
 
-### 2. Frontend Setup
-Open a new terminal, navigate to the frontend directory, and install dependencies:
-```bash
-cd frontend
-npm install
-```
-
-**Start the Frontend Server**
-```bash
-npm run dev
-```
-The frontend will typically run on `http://localhost:5173` or `5174`. 
-
-### Summary
-1. Start MongoDB / Ensure connection string in `.env` is correct.
-2. Run `nodemon server.js` in `/backend`.
-3. Run `npm run dev` in `/frontend`.
-4. Open the frontend URL in your browser to view the application!
+*   **Author:** Capstone Development Team
+*   **License:** ISC License

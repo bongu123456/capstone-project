@@ -3,6 +3,7 @@ import { authenticate } from '../services/authService.js'
 import {hash,compare} from 'bcryptjs'
 import { UserTypeModel } from '../models/UserModel.js'
 import { verifyToken } from '../middlewares/verifyToken.js'
+import jwt from 'jsonwebtoken'
 export const commonRouter=exp.Router()
 
 
@@ -58,9 +59,28 @@ commonRouter.put('/change-password',verifyToken,async(req,res)=>{
 })
 
 //Page Refresh 
-commonRouter.get("/check-auth",verifyToken("USER","AUTHOR","ADMIN"),(req,res)=>{
-  res.status(200).json({
-    message:"authenticated",
-    payload:req.user
-  })
+commonRouter.get("/check-auth", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(200).json({ isAuthenticated: false, message: "No token found", payload: null });
+    }
+
+    // Verify and decode token
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Check if role is allowed
+    const allowedRoles = ["USER", "AUTHOR", "ADMIN"];
+    if (!allowedRoles.includes(decodedToken.role)) {
+      return res.status(200).json({ isAuthenticated: false, message: "Role not allowed", payload: null });
+    }
+
+    res.status(200).json({
+      isAuthenticated: true,
+      message: "authenticated",
+      payload: decodedToken
+    });
+  } catch (err) {
+    res.status(200).json({ isAuthenticated: false, message: "Invalid or expired token", payload: null });
+  }
 })

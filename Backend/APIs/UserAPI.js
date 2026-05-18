@@ -34,8 +34,12 @@ userRoute.post("/users", upload.single("profileImageUrl"), async (req, res, next
     });
   } catch (err) {
     // Step 3: rollback
-    if (cloudinaryResult?.public_id) {
-      await cloudinary.uploader.destroy(cloudinaryResult.public_id);
+    try {
+      if (cloudinaryResult?.public_id) {
+        await cloudinary.uploader.destroy(cloudinaryResult.public_id);
+      }
+    } catch (rollbackErr) {
+      console.error("Cloudinary rollback failed:", rollbackErr);
     }
 
     next(err); // send to your error middleware
