@@ -62,10 +62,12 @@ export const authenticate = async ({ email, password }) => {
         {
             userId: user._id,
             _id: user._id,
-            name:user.name,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            name: user.firstName,
             role: user.role,
             email: user.email,
-            profileImageUrl:user.profileImageUrl
+            profileImageUrl: user.profileImageUrl
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }

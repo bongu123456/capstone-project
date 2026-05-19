@@ -63,7 +63,7 @@ function ArticleByID() {
     };
 
     getArticle();
-  }, [id]);
+  }, [id, article]);
 
   const formatDate = (date) =>
     new Date(date).toLocaleString("en-IN", {

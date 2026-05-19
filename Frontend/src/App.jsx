@@ -21,7 +21,6 @@ function App() {
       element: <RootLayout />,
       errorElement:<ErrorBoundary />,
       children: [
-        ,
         {
           path: "",
           element: <Home />,

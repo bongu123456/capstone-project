@@ -9,7 +9,7 @@ export const useAuth = create((set) => ({
   error: null,
 
   login: async (userCredWithRole) => {
-    const { role, ...userCredObj } = userCredWithRole;
+    const { role: _role, ...userCredObj } = userCredWithRole;
 
     try {
       set({ loading: true, error: null });
@@ -51,7 +51,7 @@ export const useAuth = create((set) => ({
         currentUser: null,
       });
 
-    } catch (err) {
+    } catch {
       set({
         loading: false,
         isAuthenticated: false,

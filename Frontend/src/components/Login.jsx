@@ -9,7 +9,6 @@ import {
   submitBtn,
   errorClass,
   mutedText,
-  divider,
   linkClass,
 } from "../styles/common";
 import { NavLink } from "react-router";
@@ -47,7 +46,7 @@ function Login() {
         }
       }
     }
-  }, [isAuthenticated, currentUser]);
+  }, [isAuthenticated, currentUser, location.pathname, navigate]);
 
   return (
     <div className={`${pageBackground} flex items-center justify-center py-16 px-4`}>

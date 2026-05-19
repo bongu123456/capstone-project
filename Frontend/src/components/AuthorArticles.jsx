@@ -54,13 +54,6 @@ function AuthorArticles() {
     });
   };
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      dateStyle: "medium",
-    });
-  };
-
   if (loading) return <p className={loadingClass}>Loading articles...</p>;
   if (error) return <p className={errorClass}>{error}</p>;
 
