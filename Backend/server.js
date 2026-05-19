@@ -13,8 +13,9 @@ const app = exp()
 //use cors middleware
 app.use(cors({
   origin: [
-    /^http:\/\/(localhost|127\.0\.0\.1):\d+$/,
-    /^https:\/\/(capstone-project-.*|blogapp1-sigma)\.vercel\.app$/
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://capstone-project-govr9x3ug-usermanagement.vercel.app"
   ],
   credentials: true
 }));
