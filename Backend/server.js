@@ -14,8 +14,6 @@ const app = exp()
 app.use(cors({
   origin: [
     /^http:\/\/localhost:\d+$/,
-    "https://blogapp1-sigma.vercel.app",
-    "https://capstone-project-bice-one.vercel.app",
     "https://capstone-project-govr9x3ug-usermanagement.vercel.app",
     /^https:\/\/capstone-project-.*\.vercel\.app$/
   ],
