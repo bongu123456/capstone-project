@@ -48,8 +48,8 @@ const connectDB = async () => {
 connectDB()
 
 //dealing with invlid path
-app.use((req,res,next)=>{
-  res.json({message: req.url +"Invalid path"})
+app.use((req, res, next) => {
+  res.status(404).json({ message: `${req.url} is an invalid path` });
 })
 
 
@@ -78,7 +78,7 @@ app.use((err, req, res, next) => {
 
   const errCode = err.code ?? err.cause?.code ?? err.errorResponse?.code;
   const keyValue = err.keyValue ?? err.cause?.keyValue ?? err.errorResponse?.keyValue;
-  if (errCode === 11000) {
+  if (errCode === 11000 && keyValue) {
     const field = Object.keys(keyValue)[0];
     const value = keyValue[field];
   
