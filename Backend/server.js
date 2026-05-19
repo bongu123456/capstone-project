@@ -15,7 +15,8 @@ app.use(cors({
   origin: [
     "http://localhost:5173",
     "http://localhost:5174",
-    "https://capstone-project-govr9x3ug-usermanagement.vercel.app"
+    "https://capstone-project-govr9x3ug-usermanagement.vercel.app",
+    "https://capstone-project-bice-one.vercel.app"
   ],
   credentials: true
 }));
